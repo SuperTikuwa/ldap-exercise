@@ -1,0 +1,31 @@
+version: '3'
+services:
+  app:
+    image: koda/docker-knowledge
+    volumes:
+      - data:/root/.knowledge
+    ports:
+      - "8080:8080"
+    restart: always
+    depends_on:
+      - "db"
+    networks:
+      - default
+      - openldap_default
+  db:
+    image: postgres:9
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=admin123
+      - POSTGRES_DB=knowledge_production
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    restart: always
+
+volumes:
+  data:
+  db_data:
+
+networks:
+  openldap_default:
+    external: true
